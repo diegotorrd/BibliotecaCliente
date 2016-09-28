@@ -8,6 +8,7 @@ package servlets;
 import bean.Libro;
 import bean.Usuario;
 import com.google.gson.Gson;
+import dao.BibliotecaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
@@ -104,23 +105,15 @@ public class RegistroServlet extends HttpServlet {
         lib.setPaginas(paginas);
         lib.setImagen(imagen);
         
-        HttpSession session = request.getSession();
+        BibliotecaDAO dao = new BibliotecaDAO();
+        String nuevoID = dao.ingresarLibro(lib);
         
-        String libro = gson.toJson(lib);
-       String url = "http://localhost:8080/webresources/generic/ingresarLibro";
-        URI uri = URI.create(url);
+        if(nuevoID!= null){
+            response.sendRedirect("jsp/muro_operador.jsp");
+        }else{
+            
+        }
         
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(uri).queryParam("libro", lib);
-               
-        String  nuevoId = null;
-        
-        Invocation.Builder invocatBuilder = target.request(MediaType.APPLICATION_JSON);
-        Response resp = invocatBuilder.get();
-        String rpta = resp.readEntity(String.class);
-        
-                
-        nuevoId = gson.fromJson(rpta, String.class);
         
     }
 

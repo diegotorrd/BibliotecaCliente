@@ -8,6 +8,7 @@ package servlets;
 import bean.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dao.LoginDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
@@ -72,23 +73,26 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         
         
-       String url = "http://localhost:8080/webresources/generic/login";
-        URI uri = URI.create(url);
+//       String url = "http://localhost:8080/webresources/generic/login";
+//        URI uri = URI.create(url);
+//        
+//        Client client = ClientBuilder.newClient();
+//        WebTarget target = client.target(uri).queryParam("usuario", usuario).queryParam("password", contraseña);
+//               
+//        
+//        
+//        Invocation.Builder invocatBuilder = target.request(MediaType.APPLICATION_JSON);
+//        Response resp = invocatBuilder.get();
+//        String rpta = resp.readEntity(String.class);
+//        
+//        Gson gson = new Gson();
+//        
+//        usu = gson.fromJson(rpta, Usuario.class);
         
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(uri).queryParam("usuario", usuario).queryParam("password", contraseña);
-               
         Usuario  usu = null;
+        LoginDAO dao = new LoginDAO();
         
-        Invocation.Builder invocatBuilder = target.request(MediaType.APPLICATION_JSON);
-        Response resp = invocatBuilder.get();
-        String rpta = resp.readEntity(String.class);
-        
-        Gson gson = new Gson();
-        
-        usu = gson.fromJson(rpta, Usuario.class);
-        
-        
+        usu = dao.login(usuario, contraseña);
         
         if(usu!=null){
             session.setAttribute("usuario", usu);

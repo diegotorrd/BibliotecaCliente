@@ -150,42 +150,49 @@
        <div class="container">
             <div class="row">
                 <div class="col-sm-6" style="margin-right: 20px">
-                    <h2 class="section-heading">Registra un nuevo libro a la Biblioteca!</h2>
-                    <p>No olvides especificar todos los detalles n_n</p>
-                    
+                    <h2 class="section-heading">Modifica los datos de un libro</h2>
+                    <p>Antes búscalo por su ID</p>
+                        <div class=" row input-group" style="margin-bottom: 10px; width: 300px" >
+                            <span class="input-group-addon" id="basic-addon1"></span>
+                            <input id="id-mod" name="id-mod" type="text" class="form-control" placeholder="ID del libro" aria-describedby="basic-addon1">
+                        </div>
+                        <div class=" row input-group" style="margin-bottom: 10px">
+                            <input id="btn-buscar-moda" name="btn-buscar-moda" type="button" class="btn btn-outline btn-xl page-scroll" style="color: #9d9d9d" value="Buscar">
+                            <button id="btn-buscar-mod" name="btn-buscar-mod" type="submit" > buscar</button>
+                        </div>
                 </div>
                 
-                <div class="col-sm-5" id="div-modificar" >
+                <div class="col-sm-5" id="div-modificar">
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">1.</span>
-                        <input type="text" class="form-control" placeholder="Titulo del libro" aria-describedby="basic-addon1">
+                        <input id="titulo-mod" name="titulo-mod" type="text" class="form-control" placeholder="Titulo del libro" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">2.</span>
-                        <input type="text" class="form-control" placeholder="Autor(a) del libro" aria-describedby="basic-addon1">
+                        <input id="autor-mod" name="autor-mod" type="text" class="form-control" placeholder="Autor(a) del libro" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">3.</span>
-                        <input type="text" class="form-control" placeholder="Genero" aria-describedby="basic-addon1">
+                        <input id="genero-mod" name="genero-mod" type="text" class="form-control" placeholder="Genero" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">4.</span>
-                        <input type="text" class="form-control" placeholder="País" aria-describedby="basic-addon1">
+                        <input id="pais-mod" name="pais-mod" type="text" class="form-control" placeholder="País" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">5.</span>
-                        <input type="date" class="form-control" placeholder="Fecha publicación" aria-describedby="basic-addon1">
+                        <input id="publicacion-mod" name="publicacion-mod" type="date" class="form-control" placeholder="Fecha publicación" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">6.</span>
-                        <input type="number" class="form-control" placeholder="Paginas" aria-describedby="basic-addon1">
+                        <input id="paginas-mod" name="paginas-mod" type="number" class="form-control" placeholder="Paginas" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
                         <span class="input-group-addon" id="basic-addon1">7.</span>
-                        <input type="text" class="form-control" placeholder="Imagen" aria-describedby="basic-addon1">
+                        <input id="imagen-mod" name="imagen-mod" type="text" class="form-control" placeholder="Imagen" aria-describedby="basic-addon1">
                     </div>
-                    <div class=" row input-group" style="margin-bottom: 10px">
-                        <a href="#contact" class="btn btn-outline btn-xl page-scroll">Registrar</a>
+                    <div class=" row input-group" style="margin-bottom: 10px" >
+                        <a href="#contact" class="btn btn-outline btn-xl page-scroll" style="color: #9d9d9d">Modificar</a>
                     </div>
                     
                 </div>
@@ -222,6 +229,32 @@
 
     <!-- Theme JavaScript -->
     <script src="../js/new-age.min.js"></script>
+    
+    <script>
+        document.getElementById("btn-buscar-mod").addEventListener("click", myFunction);
+        function myFunction() {
+            $.get("../BuscarLibroPorID", function(lib) {   
+            var $titulo = $("titulo-mod");
+            var $autor = $("autor-mod");
+            var $genero = $("genero-mod");
+            var $pais = $("pais-mod");
+            var $publicacion = $("publicacion-mod");
+            var $paginas = $("paginas-mod");
+            var $imagen = $("imagen-mod");
+            
+            var divmod = document.getElementById('div-modificar');
+            divmod.style.visibility = 'visible';
+            $titulo.text(lib.titulo);
+            $autor.text(lib.autor);
+            $genero.text(lib.genero);
+            $pais.text(lib.pais);
+            $publicacion.text(lib.publicacion);
+            $paginas.text(lib.paginas);
+            $imagen.text(lib.imagen);
+    });
+        }
+    </scrip>
+        
 
 </body>
 

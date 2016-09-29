@@ -96,7 +96,10 @@ public class BibliotecaDAO {
                 lib.setPaginas(dbo.getInt("paginas"));
                 lib.setImagen(dbo.getString("imagen"));
                 lib.setEstado(dbo.getString("estado"));
+            }else{
+                lib=null;
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

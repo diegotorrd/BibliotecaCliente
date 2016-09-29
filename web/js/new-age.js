@@ -1,8 +1,11 @@
 (function($) {
     "use strict"; // Start of use strict
     $(document).ready(function() {
-    $('#div-modificar *').attr('disabled', true);
+        var divmod = document.getElementById('div-modificar');
+        divmod.style.visibility = 'hidden';
+//    $('#div-modificar *').attr('disabled', true);
 });
+
 
     // jQuery for page scrolling feature - requires jQuery Easing plugin
     $('a.page-scroll').bind('click', function(event) {

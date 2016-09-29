@@ -6,12 +6,14 @@ public class Usuario {
     private String usuario;
     private String nombre;
     private String apellido;
+    private String tipo;
 
 
-    public Usuario(String usuario, String nombre, String apellido) {
+    public Usuario(String usuario, String nombre, String apellido, String tipo) {
         this.usuario = usuario;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.tipo = tipo;
     }
     
         public Usuario() {
@@ -39,6 +41,14 @@ public class Usuario {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
     
     

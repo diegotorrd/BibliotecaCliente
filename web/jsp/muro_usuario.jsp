@@ -4,6 +4,8 @@
     Author     : Diego Torres
 --%>
 
+<%@page import="bean.Libro"%>
+<%@page import="java.util.List"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -31,6 +33,7 @@
     <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../vendor/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="../vendor/device-mockups/device-mockups.min.css">
+    <link rel="stylesheet" href="../css/popup.css">
 
     <!-- Theme CSS -->
     <link href="../css/new-age.min.css" rel="stylesheet">
@@ -45,6 +48,32 @@
 </head>
 
 <body id="page-top">
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+              <div class="modal-header">
+                <span class="close">×</span>
+                <h2 style="" id="titulo-pop"></h2>
+              </div>
+              <div class="modal-body">
+                  <div class="row" style="margin-top: 30px">
+                      <div class="col" style="float: left; margin-left: 30px">
+                        <p id="autor-pop"></p>
+                        <p id="genero-pop"></p>
+                        <p id="pais-pop"></p>
+                        <p id="publicacion-pop"></p>
+                        <p id="paginas-pop"></p>                      
+                      </div>                  
+                      <div class="col" style="float: right; margin-right: 30px">
+                          <img id="imagen-pop" class="img-responsive" style=" height: 200px">                      
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <p id="id-pop"></p>
+              </div>
+            </div>
+        </div>
 
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -114,27 +143,33 @@
                             <div class="col-md-12">
                                 <div class="carousel slide multi-item-carousel" id="theCarousel">
                                     <div class="carousel-inner">
-                                        <div class="item active">
-                                            <div class="col-sm-4">
-                                                <a href="#1"><img src="http://placehold.it/300/f44336/000000" class="img-responsive"></a>
-                                                <p>jeje</p>
+                                        <% 
+                                            List<Libro> cat = (List<Libro>)session.getAttribute("catalogo");
+                                        %>
+                                            <div class="item active">
+                                                <div class="col-xs-4">
+                                                    <center><a id="0" class="link-libro" onclick="clickImg(this.id)" ><img src="<%=cat.get(0).getImagen()%>" class="img-responsive" style=" height: 200px"></a></center>
+                                                    <p style="color: #222; margin-bottom: 1px; font-size: 15px">Titulo: <%=cat.get(0).getTitulo()%></p>
+                                                    <p style="color: #222; margin-bottom: 1px; font-size: 15px">Autor: <%=cat.get(0).getAutor()%></p>
+                                                    <p id="id-img-0" style="margin-bottom: 1px; font-size: 15px; visibility: hidden"><%=cat.get(0).getId()%></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="col-sm-4"><a href="#1"><img src="http://placehold.it/300/e91e63/000000" class="img-responsive"></a></div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="col-xs-4"><a href="#1"><img src="http://placehold.it/300/9c27b0/000000" class="img-responsive"></a></div>
-                                        </div>
-                                        <div class="item">
-                                          <div class="col-xs-4"><a href="#1"><img src="http://placehold.it/300/673ab7/000000" class="img-responsive"></a></div>
-                                        </div>
-                                        <div class="item">
-                                          <div class="col-xs-4"><a href="#1"><img src="http://placehold.it/300/4caf50/000000" class="img-responsive"></a></div>
-                                        </div>
-                                        <div class="item">
-                                          <div class="col-xs-4"><a href="#1"><img src="http://placehold.it/300/8bc34a/000000" class="img-responsive"></a></div>
-                                        </div>
+                                               
+                                        <%
+                                            for(int i=1; i<cat.size();i++){
+                                             %>
+                                             <div class="item">
+                                                <div class="col-xs-4">
+                                                    <center> <a id="<%=i%>"  class="link-libro" onclick="clickImg(this.id)"><img src="<%=cat.get(i).getImagen()%>" class="img-responsive" style=" height: 200px; display: block; margin-left: auto; margin-right: auto"></a></center>
+                                                    <p style="color: #222; margin-bottom: 1px; font-size: 15px">Titulo: <%=cat.get(i).getTitulo()%></p>
+                                                    <p style="color: #222; margin-bottom: 1px; font-size: 15px">Autor: <%=cat.get(i).getAutor()%></p>
+                                                    <p id="id-img-<%=i%>" style="margin-bottom: 1px; font-size: 15px; visibility: hidden"><%=cat.get(i).getId()%></p>
+                                                </div>
+                                            </div>                                              
+                                             <%
+                                            }
+                                        %>
+                                             
                                     </div>
                                     <a class="left carousel-control" href="#theCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
                                     <a class="right carousel-control" href="#theCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -153,6 +188,14 @@
             <div class="row">
                 <div class="col-sm-6" style="margin-right: 20px">
                     <h2 class="section-heading">Si conoces el ID del libro, buscalo ;)</h2>
+                    <div class=" row input-group" style="margin-bottom: 10px; width: 300px" >
+                            <span class="input-group-addon" id="basic-addon1"></span>
+                            <input id="id-bus-usu" name="id-bus-usu" type="text" class="form-control" placeholder="ID del libro" >
+                        </div>
+                        <div class=" row input-group" style="margin-bottom: 10px">
+                            <input id="btn-buscar-usu" name="btn-buscar-mod" type="button" onclick="buscarLibroUsu()" class="btn btn-outline btn-xl page-scroll" style="color: #9d9d9d" value="Busscar">
+                        </div>
+                    
                     
                 </div>
                 
@@ -162,7 +205,7 @@
                         <input type="text" class="form-control" placeholder="ID" aria-describedby="basic-addon1">
                     </div>
                     <div class=" row input-group" style="margin-bottom: 10px">
-                        <a href="#contact" class="btn btn-outline btn-xl page-scroll" style="color: #9d9d9d">Buscar</a>
+                        <button id="buscar-us" class="btn btn-outline btn-xl page-scroll" style="color: #9d9d9d">Buscar</button>>
                     </div>
                     
                 </div>
@@ -199,6 +242,15 @@
 
     <!-- Theme JavaScript -->
     <script src="../js/new-age.min.js"></script>
+    
+    <script src="../js/cascada.js"></script>
+    
+    <script src="../js/catalogo.js"></script>
+    
+    <script src="../js/funciones.js"></script>
+    
+    <script src="../js/popup.js"></script>
+    
 
 </body>
 

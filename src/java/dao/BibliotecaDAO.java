@@ -8,6 +8,7 @@ package dao;
 import bean.Libro;
 import bean.Usuario;
 import com.google.gson.Gson;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -41,11 +42,11 @@ public class BibliotecaDAO {
         Gson gson = new Gson();
         ConexionMLab con = new ConexionMLab();
         MongoClient mongo = con.getConexion();
-        String res="";
+        String id = null;
         try{
             DB db = mongo.getDB("biblioteca");
             DBCollection coleccion = db.getCollection("libro");
-            String id = this.getId(coleccion);
+            id = this.getId(coleccion);
             
             BasicDBObject dbo = new BasicDBObject();
             dbo.put("id", id);
@@ -59,17 +60,56 @@ public class BibliotecaDAO {
             dbo.put("estado", "A");
             
             coleccion.insert(dbo);
-            res= id;
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            mongo.close();
+        }
+        if (id!=null){
+            return id;            
+        }else{
+            return null;
+        }        
+    }
+    
+        public int modificarLibro(Libro libro){
+        Gson gson = new Gson();
+        ConexionMLab con = new ConexionMLab();
+        MongoClient mongo = con.getConexion();
+        int rows = 0;
+        try{
+            DB db = mongo.getDB("biblioteca");
+            DBCollection coleccion = db.getCollection("libro");
+            
+            BasicDBObject query = new BasicDBObject();
+            BasicDBObject query1 = new BasicDBObject();
+            query1.put("$eq", libro.getId());
+            query.put("id", query1);
+            
+            DBObject dbo = new BasicDBObject();
+            dbo.put("titulo", libro.getTitulo());
+            dbo.put("autor", libro.getAutor());
+            dbo.put("genero", libro.getGenero());
+            dbo.put("pais", libro.getPais());
+            dbo.put("publicacion", libro.getPublicacion());
+            dbo.put("paginas", libro.getPaginas());
+            dbo.put("imagen", libro.getImagen());
+            dbo.put("estado", libro.getEstado());
+            
+            DBObject dbo2 = new BasicDBObject();
+            dbo2.put("$set",dbo);
+            
+            rows = coleccion.update(query,dbo2).getN();
             
         }catch(Exception e){
             e.printStackTrace();
         }finally{
             mongo.close();
         }
-        if (res!=""){
-            return null;            
+        if (rows!=0){
+            return rows;            
         }else{
-            return res;
+            return 0;
         }        
     }
     
@@ -140,8 +180,12 @@ public class BibliotecaDAO {
             e.printStackTrace();
         } finally {
             mongo.close();
+        } 
+        if(catalogo.size()==0){
+            return null;
+        }else{
+            return catalogo;
         }        
-        return catalogo;
     }
     
 }

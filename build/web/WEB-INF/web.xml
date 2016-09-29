@@ -12,6 +12,14 @@
         <servlet-name>BuscarLibroPorID</servlet-name>
         <servlet-class>servlets.BuscarLibroPorID</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ModificacionServlet</servlet-name>
+        <servlet-class>servlets.ModificacionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BuscarCatalogo</servlet-name>
+        <servlet-class>servlets.BuscarCatalogo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>BuscarLibroPorID</servlet-name>
         <url-pattern>/BuscarLibroPorID</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModificacionServlet</servlet-name>
+        <url-pattern>/ModificacionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuscarCatalogo</servlet-name>
+        <url-pattern>/BuscarCatalogo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

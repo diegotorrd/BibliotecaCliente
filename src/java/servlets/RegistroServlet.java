@@ -101,7 +101,7 @@ public class RegistroServlet extends HttpServlet {
         lib.setAutor(autor);
         lib.setGenero(genero);
         lib.setPais(pais);
-        lib.setPublicacion(publicacion.toString());
+        lib.setPublicacion(publicacion);
         lib.setPaginas(paginas);
         lib.setImagen(imagen);
         
@@ -109,9 +109,15 @@ public class RegistroServlet extends HttpServlet {
         String nuevoID = dao.ingresarLibro(lib);
         
         if(nuevoID!= null){
-            response.sendRedirect("jsp/muro_operador.jsp");
+            String json = new Gson().toJson(nuevoID);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
         }else{
-            
+            String json = new Gson().toJson("error");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
         }
         
         

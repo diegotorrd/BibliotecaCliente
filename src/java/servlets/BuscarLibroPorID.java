@@ -10,6 +10,14 @@ import com.google.gson.Gson;
 import dao.BibliotecaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,27 +55,35 @@ public class BuscarLibroPorID extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id-mod");
+        String id_mod = request.getParameter("id_mod");
         BibliotecaDAO dao = new BibliotecaDAO();
         Libro lib = null;
         
-//        lib = dao.obtenerLibro(id);
+        lib = dao.obtenerLibro(id_mod);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date d = null;
+        try {
+            d = df.parse(lib.getPublicacion());
+        } catch (ParseException ex) {
+            Logger.getLogger(RegistroServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        df = new SimpleDateFormat("yyyy-MM-dd");
+        lib.setPublicacion(df.format(d));
         
-        if(id.equalsIgnoreCase("a")){
-            lib= new Libro();
-            lib.setAutor("yop");
-            lib.setTitulo("jaja");
-            lib.setGenero("drama");
-            lib.setImagen("ggg");
-            lib.setPaginas(45);
-            lib.setPais("peru");
-            lib.setPublicacion("2016-09-26");
+        if(lib!=null){
             
             String json = new Gson().toJson(lib);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(json);
+        }else{
+            String json = new Gson().toJson(lib);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String msg = "error";
+            response.getWriter().write(msg);
         }
+        
     }
 
     /**
@@ -81,7 +97,25 @@ public class BuscarLibroPorID extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        BibliotecaDAO dao = new BibliotecaDAO();
+        List<Libro> catalogo = new ArrayList<>();
+        
+        String param = request.getParameter("param");
+        
+        catalogo = dao.obtenerCatalogo(param);
+        
+        if(catalogo!=null){
+            request.setAttribute("catalogo",catalogo);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String msg = "true";
+            response.getWriter().write(msg);
+        }else{
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String msg = "false";
+            response.getWriter().write(msg);
+        }
     }
 
     /**

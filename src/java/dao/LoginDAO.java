@@ -37,7 +37,8 @@ public class LoginDAO {
                 usu = new Usuario();
                 usu.setUsuario(usuario);
                 usu.setNombre(dbo.get("nombres").toString());
-                usu.setApellido(dbo.get("apellidos").toString());                
+                usu.setApellido(dbo.get("apellidos").toString());
+                usu.setTipo(dbo.get("tipo").toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

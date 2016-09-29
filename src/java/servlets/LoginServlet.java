@@ -5,13 +5,17 @@
  */
 package servlets;
 
+import bean.Libro;
 import bean.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dao.BibliotecaDAO;
 import dao.LoginDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import javax.json.Json;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -96,9 +100,21 @@ public class LoginServlet extends HttpServlet {
         
         if(usu!=null){
             session.setAttribute("usuario", usu);
-            response.sendRedirect("jsp/muro_operador.jsp");
-        }else{
+            if(usu.getTipo().equalsIgnoreCase("operador")){
+                response.sendRedirect("jsp/muro_operador.jsp");                
+            }else{
+                BibliotecaDAO dao2 = new BibliotecaDAO();
+                List<Libro> catalogo = new ArrayList<>();
+
+                String param = "usuario";
+
+                catalogo = dao2.obtenerCatalogo(param);
+                session.setAttribute("catalogo",catalogo);
+                response.sendRedirect("jsp/muro_usuario.jsp"); 
+            }
             
+        }else{
+            session.setAttribute("usuario", "error");
         }
     }
 
